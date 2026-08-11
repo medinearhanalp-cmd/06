@@ -1,4 +1,3 @@
-```javascript
 const puzzlePage = document.getElementById("puzzlePage");
 const hero = document.querySelector(".hero");
 const mainPage = document.getElementById("mainPage");
@@ -7,182 +6,146 @@ const puzzleAnswer = document.getElementById("puzzleAnswer");
 const puzzleResult = document.getElementById("puzzleResult");
 const checkAnswerBtn = document.getElementById("checkAnswerBtn");
 
-const startBtn = document.getElementById("startBtn");
-
-const surpriseBtn = document.getElementById("surpriseBtn");
-const surpriseMessage = document.getElementById("surpriseMessage");
-
-
-/* BAŞLANGIÇ */
-
-puzzlePage.style.display = "flex";
-hero.style.display = "none";
-mainPage.style.display = "none";
-
-
-/* BULMACALAR */
-
 const puzzles = [
-    {
-        question: "Bebişlerimizin isimleri ne olacak? 👶❤️",
-        answers: [
-            "aras ve ayça",
-            "aras ayça",
-            "ayça ve aras",
-            "aras ayca"
-        ]
-    },
-
-    {
-        question: "Biz hangi tarihte sevgili olduk? ❤️",
-        answers: [
-            "11.01.2025",
-            "11/01/2025",
-            "11 01 2025"
-        ]
-    },
-
-    {
-        question: "En sevdiğim kişi kim? 🥰",
-        answers: [
-            "yasemin"
-        ]
-    },
-
-    {
-        question: "Beni ne kadar çok seviyorsun? ❤️",
-        answers: [
-            "sonsuz",
-            "sonsuz kadar",
-            "çok"
-        ]
-    },
-
-    {
-        question: "Bütün bulmacaları çözdüğünde seni bekleyen kişi kim? 💘",
-        answers: [
-            "umut"
-        ]
-    }
+{
+question: "Bebişlerimizin isimleri ne olacak? 👶❤️",
+answers: ["aras ve ayça", "aras ayça", "ayça ve aras", "aras ayca"]
+},
+{
+question: "Biz hangi tarihte sevgili olduk? ❤️",
+answers: ["11.01.2025", "11/01/2025", "11 01 2025"]
+},
+{
+question: "En sevdiğim kişi kim? 🥰",
+answers: ["yasemin"]
+},
+{
+question: "Beni ne kadar çok seviyorsun? ❤️",
+answers: ["sonsuz", "sonsuz kadar", "çok"]
+},
+{
+question: "Bütün bulmacaları çözdüğünde seni bekleyen kişi kim? 💘",
+answers: ["umut"]
+}
 ];
 
 let currentPuzzle = 0;
 
-
-/* CEVABI TEMİZLE */
-
 function temizle(text) {
-
-    return text
-        .toLowerCase()
-        .trim()
-        .replace(/ı/g, "i")
-        .replace(/ğ/g, "g")
-        .replace(/ü/g, "u")
-        .replace(/ş/g, "s")
-        .replace(/ö/g, "o")
-        .replace(/ç/g, "c");
+return text
+.toLowerCase()
+.trim()
+.replace(/ı/g, "i")
+.replace(/ğ/g, "g")
+.replace(/ü/g, "u")
+.replace(/ş/g, "s")
+.replace(/ö/g, "o")
+.replace(/ç/g, "c");
 }
-
-
-/* BULMACA KONTROL */
 
 function checkAnswer() {
 
-    const answer = temizle(puzzleAnswer.value);
+```
+const answer = temizle(puzzleAnswer.value);
 
-    if (answer === "") {
+if (answer === "") {
+    puzzleResult.innerHTML = "✍️ Önce bir cevap yaz bebeğim ❤️";
+    return;
+}
 
-        puzzleResult.innerHTML =
-            "✍️ Önce bir cevap yaz bebeğim ❤️";
+const correct = puzzles[currentPuzzle].answers.some(function (cevap) {
+    return temizle(cevap) === answer;
+});
+
+if (correct) {
+
+    puzzleResult.innerHTML = "✅ Doğru cevap! ❤️";
+
+    currentPuzzle++;
+
+    if (currentPuzzle >= puzzles.length) {
+
+        setTimeout(function () {
+
+            puzzlePage.style.display = "none";
+            hero.style.display = "flex";
+            hero.style.opacity = "1";
+
+        }, 1000);
 
         return;
     }
 
-    const correct =
-        puzzles[currentPuzzle].answers.some(function (cevap) {
+    setTimeout(function () {
 
-            return temizle(cevap) === answer;
+        document.getElementById("puzzleNumber").innerText =
+            "Bulmaca " + (currentPuzzle + 1) + " / 5";
 
-        });
+        document.getElementById("puzzleQuestion").innerText =
+            puzzles[currentPuzzle].question;
 
+        puzzleAnswer.value = "";
+        puzzleResult.innerHTML = "";
 
-    if (correct) {
+        puzzleAnswer.focus();
 
-        puzzleResult.innerHTML =
-            "✅ Doğru cevap! ❤️";
+    }, 800);
 
-        currentPuzzle++;
+} else {
 
+    puzzleResult.innerHTML =
+        "❌ Yanlış cevap 😏 Bir daha düşün bakalım ❤️";
 
-        if (currentPuzzle >= puzzles.length) {
+}
+```
 
-            setTimeout(function () {
-
-                puzzlePage.style.display = "none";
-
-                hero.style.display = "flex";
-                hero.style.opacity = "1";
-
-            }, 1000);
-
-            return;
-        }
-
-
-        setTimeout(function () {
-
-            document.getElementById("puzzleNumber").innerText =
-                "Bulmaca " + (currentPuzzle + 1) + " / 5";
-
-            document.getElementById("puzzleQuestion").innerText =
-                puzzles[currentPuzzle].question;
-
-            puzzleAnswer.value = "";
-
-            puzzleResult.innerHTML = "";
-
-            puzzleAnswer.focus();
-
-        }, 800);
-
-    } else {
-
-        puzzleResult.innerHTML =
-            "❌ Yanlış cevap 😏 Bir daha düşün bakalım ❤️";
-
-    }
 }
 
-
-/* CEVAP BUTONU */
-
+/* BULMACA BUTONU */
+if (checkAnswerBtn) {
 checkAnswerBtn.addEventListener("click", checkAnswer);
+}
 
+/* ENTER İLE CEVAP */
+if (puzzleAnswer) {
+puzzleAnswer.addEventListener("keydown", function (event) {
 
-/* TELEFONDA ENTER */
-
-puzzleAnswer.addEventListener("keydown", function(event) {
-
+```
     if (event.key === "Enter") {
-
         checkAnswer();
-
     }
 
 });
+```
 
+}
 
-/* BAŞLA BUTONU */
+/* BAŞLANGIÇTA BULMACAYI GÖSTER */
+if (puzzlePage) {
+puzzlePage.style.display = "flex";
+}
 
-startBtn.addEventListener("click", function() {
+if (hero) {
+hero.style.display = "none";
+}
+
+if (mainPage) {
+mainPage.style.display = "none";
+}
+
+/* GİRİŞ BUTONU */
+const startBtn = document.getElementById("startBtn");
+
+if (startBtn) {
+
+```
+startBtn.addEventListener("click", function () {
 
     hero.style.opacity = "0";
 
-    setTimeout(function() {
+    setTimeout(function () {
 
         hero.style.display = "none";
-
         mainPage.style.display = "block";
 
         window.scrollTo({
@@ -192,94 +155,83 @@ startBtn.addEventListener("click", function() {
 
         createHearts();
 
-    }, 600);
+    }, 900);
 
 });
-
-
-/* UÇAN KALPLER */
-
-function createHearts() {
-
-    setInterval(function() {
-
-        const heart = document.createElement("div");
-
-        heart.innerHTML = "❤";
-
-        heart.style.position = "fixed";
-        heart.style.left =
-            Math.random() * window.innerWidth + "px";
-
-        heart.style.top =
-            window.innerHeight + "px";
-
-        heart.style.fontSize =
-            (20 + Math.random() * 25) + "px";
-
-        heart.style.color = "#ff2d55";
-
-        heart.style.pointerEvents = "none";
-
-        heart.style.zIndex = "9999";
-
-        heart.style.transition =
-            "5s linear";
-
-        document.body.appendChild(heart);
-
-
-        setTimeout(function() {
-
-            heart.style.transform =
-                "translateY(-120vh)";
-
-            heart.style.opacity = "0";
-
-        }, 10);
-
-
-        setTimeout(function() {
-
-            heart.remove();
-
-        }, 5000);
-
-    }, 350);
+```
 
 }
 
+/* KALPLER */
+function createHearts() {
 
-/* BİRLİKTE GEÇEN GÜNLER */
+```
+setInterval(function () {
 
+    const heart = document.createElement("div");
+
+    heart.innerHTML = "❤️";
+
+    heart.style.position = "fixed";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.top = window.innerHeight + "px";
+    heart.style.fontSize =
+        (20 + Math.random() * 25) + "px";
+
+    heart.style.pointerEvents = "none";
+    heart.style.zIndex = "9999";
+    heart.style.transition = "5s linear";
+
+    document.body.appendChild(heart);
+
+    setTimeout(function () {
+
+        heart.style.transform =
+            "translateY(-120vh)";
+
+        heart.style.opacity = "0";
+
+    }, 10);
+
+    setTimeout(function () {
+
+        heart.remove();
+
+    }, 5000);
+
+}, 350);
+```
+
+}
+
+/* AŞK SAYACI */
 function updateLoveCounter() {
 
-    const start =
-        new Date("2025-01-11T00:00:00");
+```
+const start =
+    new Date("2025-01-11T00:00:00");
 
-    const now =
-        new Date();
+const now = new Date();
 
-    const diff =
-        now - start;
+const diff = now - start;
 
-    const days =
-        Math.floor(
-            diff / 1000 / 60 / 60 / 24
-        );
+const days =
+    Math.floor(
+        diff / 1000 / 60 / 60 / 24
+    );
 
-    const counter =
-        document.getElementById("loveCounter");
+const counter =
+    document.getElementById("loveCounter");
 
+if (counter) {
 
-    if (counter) {
+    counter.innerHTML =
+        "Seninle " +
+        days +
+        " gündür birlikteyiz ❤️";
 
-        counter.innerHTML =
-            "Seninle " +
-            days +
-            " gündür birlikteyiz ❤️";
-
-    }
+}
+```
 
 }
 
@@ -287,19 +239,25 @@ updateLoveCounter();
 
 setInterval(updateLoveCounter, 60000);
 
-
 /* FİNAL SÜRPRİZİ */
+const surpriseBtn =
+document.getElementById("surpriseBtn");
 
-surpriseBtn.addEventListener("click", function() {
+const surpriseMessage =
+document.getElementById("surpriseMessage");
+
+if (surpriseBtn && surpriseMessage) {
+
+```
+surpriseBtn.addEventListener("click", function () {
 
     surpriseBtn.style.display = "none";
 
     surpriseMessage.style.display = "block";
 
-
     for (let i = 0; i < 20; i++) {
 
-        setTimeout(function() {
+        setTimeout(function () {
 
             const heart =
                 document.createElement("div");
@@ -307,18 +265,15 @@ surpriseBtn.addEventListener("click", function() {
             heart.innerHTML = "❤️";
 
             heart.style.position = "fixed";
-
             heart.style.left =
                 Math.random() * 100 + "vw";
 
-            heart.style.bottom =
-                "-30px";
+            heart.style.bottom = "-30px";
 
             heart.style.fontSize =
                 (15 + Math.random() * 25) + "px";
 
             heart.style.zIndex = "9999";
-
             heart.style.pointerEvents = "none";
 
             heart.style.transition =
@@ -326,8 +281,7 @@ surpriseBtn.addEventListener("click", function() {
 
             document.body.appendChild(heart);
 
-
-            setTimeout(function() {
+            setTimeout(function () {
 
                 heart.style.transform =
                     "translateY(-110vh) rotate(360deg)";
@@ -336,8 +290,7 @@ surpriseBtn.addEventListener("click", function() {
 
             }, 100);
 
-
-            setTimeout(function() {
+            setTimeout(function () {
 
                 heart.remove();
 
@@ -349,3 +302,5 @@ surpriseBtn.addEventListener("click", function() {
 
 });
 ```
+
+}
